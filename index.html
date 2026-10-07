@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpeedType - Typing Trainer</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #171717;
+        color: white;
+        min-height: 100vh;
+    }
+
+    header {
+        padding: 22px;
+        text-align: center;
+        background: #222;
+        border-bottom: 1px solid #333;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 32px;
+    }
+
+    header p {
+        color: #aaa;
+        margin: 8px 0 0;
+    }
+
+    .container {
+        width: min(900px, 92%);
+        margin: 40px auto;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat {
+        background: #222;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .stat-title {
+        color: #999;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .progress {
+        height: 8px;
+        background: #333;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: #4ade80;
+        transition: width 0.3s;
+    }
+
+    .level {
+        text-align: center;
+        color: #aaa;
+        margin-bottom: 15px;
+    }
+
+    .typing-box {
+        background: #222;
+        border: 1px solid #333;
+        border-radius: 15px;
+        padding: 30px;
+    }
+
+    .sentence {
+        font-size: 25px;
+        line-height: 1.7;
+        min-height: 90px;
+        margin-bottom: 25px;
+        word-wrap: break-word;
+    }
+
+    .letter {
+        color: #777;
+    }
+
+    .letter.correct {
+        color: #4ade80;
+    }
+
+    .letter.incorrect {
+        color: #f87171;
+        text-decoration: underline;
+    }
+
+    .letter.current {
+        border-left: 2px solid white;
+    }
+
+    textarea {
+        width: 100%;
+        height: 130px;
+        resize: none;
+        background: #151515;
+        color: white;
+        border: 1px solid #444;
+        border-radius: 10px;
+        padding: 18px;
+        font-size: 20px;
+        outline: none;
+        font-family: inherit;
+    }
+
+    textarea:focus {
+        border-color: #777;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    button {
+        border: none;
+        border-radius: 9px;
+        padding: 13px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background: #333;
+        color: white;
+    }
+
+    button:hover {
+        background: #444;
+    }
+
+    .result {
+        display: none;
+        margin-top: 20px;
+        background: #222;
+        border: 1px solid #333;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+    }
+
+    .result h2 {
+        margin-top: 0;
+    }
+
+    .big-wpm {
+        font-size: 55px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .message {
+        color: #aaa;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 650px) {
+        .stats {
+            grid-template-columns: 1fr;
+        }
+
+        .sentence {
+            font-size: 20px;
+        }
+
+        .typing-box {
+            padding: 20px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>⌨️ SpeedType</h1>
+    <p>Train your typing speed and reach 80 WPM!</p>
+</header>
+
+<div class="container">
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-title">WPM</div>
+            <div class="stat-value" id="wpm">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-title">Accuracy</div>
+            <div class="stat-value" id="accuracy">100%</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-title">Time</div>
+            <div class="stat-value" id="time">0s</div>
+        </div>
+    </div>
+
+    <div class="level" id="level">
+        Level 1 — Easy
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="typing-box">
+
+        <div class="sentence" id="sentence"></div>
+
+        <textarea
+            id="typingInput"
+            placeholder="Start typing the sentence above..."
+            spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off">
+        </textarea>
+
+        <div class="buttons">
+            <button id="restartButton">Restart</button>
+            <button id="nextButton" style="display:none;">
+                Next Sentence
+            </button>
+        </div>
+
+    </div>
+
+    <div class="result" id="result">
+        <h2>🏁 Sentence Complete!</h2>
+
+        <div class="big-wpm" id="finalWpm">
+            0 WPM
+        </div>
+
+        <div class="message" id="resultMessage">
+            Nice!
+        </div>
+
+        <button id="continueButton">
+            Continue
+        </button>
+    </div>
+
+</div>
+
+<script>
+
+/* ==========================================
+   SENTENCES
+   ========================================== */
+
+const sentences = [
+
+    /* LEVEL 1 - VERY EASY */
+
+    {
+        text: "The cat sat on the mat.",
+        level: 1,
+        name: "Easy"
+    },
+
+    {
+        text: "The sun is warm today.",
+        level: 1,
+        name: "Easy"
+    },
+
+    {
+        text: "I like playing games.",
+        level: 1,
+        name: "Easy"
+    },
+
+    {
+        text: "The dog ran home.",
+        level: 1,
+        name: "Easy"
+    },
+
+    {
+        text: "My computer is fast.",
+        level: 1,
+        name: "Easy"
+    },
+
+
+    /* LEVEL 2 - EASY */
+
+    {
+        text: "The quick fox jumped over the dog.",
+        level: 2,
+        name: "Easy"
+    },
+
+    {
+        text: "I enjoy typing on my keyboard.",
+        level: 2,
+        name: "Easy"
+    },
+
+    {
+        text: "Today is a great day to practise.",
+        level: 2,
+        name: "Easy"
+    },
+
+    {
+        text: "The blue car drove down the road.",
+        level: 2,
+        name: "Easy"
+    },
+
+    {
+        text: "My favourite game is really fun.",
+        level: 2,
+        name: "Easy"
+    },
+
+
+    /* LEVEL 3 - MEDIUM */
+
+    {
+        text: "Typing quickly takes practice and patience.",
+        level: 3,
+        name: "Medium"
+    },
+
+    {
+        text: "The computer screen became brighter as the room got darker.",
+        level: 3,
+        name: "Medium"
+    },
+
+    {
+        text: "Learning to type accurately is more important than rushing.",
+        level: 3,
+        name: "Medium"
+    },
+
+    {
+        text: "The racing car accelerated quickly around the corner.",
+        level: 3,
+        name: "Medium"
+    },
+
+    {
+        text: "Every mistake gives you another chance to improve.",
+        level: 3,
+        name: "Medium"
+    },
+
+
+    /* LEVEL 4 - HARD */
+
+    {
+        text: "The fastest typists stay relaxed while keeping their fingers moving.",
+        level: 4,
+        name: "Hard"
+    },
+
+    {
+        text: "Improving your accuracy will eventually make your typing much faster.",
+        level: 4,
+        name: "Hard"
+    },
+
+    {
+        text: "A consistent typing rhythm can help you maintain a high speed.",
+        level: 4,
+        name: "Hard"
+    },
+
+    {
+        text: "The complicated sentence required concentration, accuracy, and patience.",
+        level: 4,
+        name: "Hard"
+    },
+
+    {
+        text: "Small improvements every day can lead to surprisingly fast results.",
+        level: 4,
+        name: "Hard"
+    },
+
+
+    /* LEVEL 5 - VERY HARD */
+
+    {
+        text: "Extraordinary concentration allows experienced typists to maintain incredible speeds without sacrificing accuracy.",
+        level: 5,
+        name: "Very Hard"
+    },
+
+    {
+        text: "The surprisingly complicated challenge required exceptional concentration and remarkably consistent keyboard control.",
+        level: 5,
+        name: "Very Hard"
+    },
+
+    {
+        text: "Professional typists develop incredible precision by repeatedly practising difficult combinations of letters and punctuation.",
+        level: 5,
+        name: "Very Hard"
+    },
+
+    {
+        text: "Reaching eighty words per minute requires accuracy, consistency, confidence, and plenty of regular practice.",
+        level: 5,
+        name: "Very Hard"
+    },
+
+    {
+        text: "The incredibly fast racer maintained perfect concentration while typing an increasingly difficult collection of sentences.",
+        level: 5,
+        name: "Very Hard"
+    }
+
+];
+
+
+/* ==========================================
+   VARIABLES
+   ========================================== */
+
+let currentSentence = 0;
+
+let startTime = null;
+
+let timer = null;
+
+let finished = false;
+
+
+/* ==========================================
+   ELEMENTS
+   ========================================== */
+
+const sentenceElement =
+    document.getElementById("sentence");
+
+const input =
+    document.getElementById("typingInput");
+
+const wpmElement =
+    document.getElementById("wpm");
+
+const accuracyElement =
+    document.getElementById("accuracy");
+
+const timeElement =
+    document.getElementById("time");
+
+const levelElement =
+    document.getElementById("level");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const result =
+    document.getElementById("result");
+
+const finalWpm =
+    document.getElementById("finalWpm");
+
+const resultMessage =
+    document.getElementById("resultMessage");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const nextButton =
+    document.getElementById("nextButton");
+
+const continueButton =
+    document.getElementById("continueButton");
+
+
+/* ==========================================
+   LOAD SENTENCE
+   ========================================== */
+
+function loadSentence() {
+
+    const current = sentences[currentSentence];
+
+    sentenceElement.innerHTML = "";
+
+    for (let i = 0; i < current.text.length; i++) {
+
+        const span = document.createElement("span");
+
+        span.textContent = current.text[i];
+
+        span.className = "letter";
+
+        sentenceElement.appendChild(span);
+    }
+
+    levelElement.textContent =
+        "Level " +
+        current.level +
+        " — " +
+        current.name;
+
+    input.value = "";
+
+    input.disabled = false;
+
+    finished = false;
+
+    startTime = null;
+
+    clearInterval(timer);
+
+    wpmElement.textContent = "0";
+
+    accuracyElement.textContent = "100%";
+
+    timeElement.textContent = "0s";
+
+    progressBar.style.width = "0%";
+
+    result.style.display = "none";
+
+    nextButton.style.display = "none";
+
+    setTimeout(() => {
+        input.focus();
+    }, 100);
+}
+
+
+/* ==========================================
+   START TIMER
+   ========================================== */
+
+function startTimer() {
+
+    if (startTime !== null) {
+        return;
+    }
+
+    startTime = Date.now();
+
+    timer = setInterval(updateStats, 100);
+}
+
+
+/* ==========================================
+   UPDATE TYPING DISPLAY
+   ========================================== */
+
+function updateTypingDisplay() {
+
+    const current = sentences[currentSentence].text;
+
+    const typed = input.value;
+
+    const letters =
+        sentenceElement.querySelectorAll(".letter");
+
+    let correct = 0;
+
+    for (let i = 0; i < letters.length; i++) {
+
+        letters[i].className = "letter";
+
+        if (i < typed.length) {
+
+            if (typed[i] === current[i]) {
+
+                letters[i].classList.add("correct");
+
+                correct++;
+
+            } else {
+
+                letters[i].classList.add("incorrect");
+            }
+        }
+
+        if (i === typed.length) {
+
+            letters[i].classList.add("current");
+        }
+    }
+
+    return correct;
+}
+
+
+/* ==========================================
+   UPDATE WPM / ACCURACY
+   ========================================== */
+
+function updateStats() {
+
+    if (startTime === null) {
+        return;
+    }
+
+    const elapsed =
+        (Date.now() - startTime) / 1000;
+
+    const minutes =
+        elapsed / 60;
+
+    const typed =
+        input.value;
+
+    const current =
+        sentences[currentSentence].text;
+
+    let correct = 0;
+
+    for (let i = 0; i < typed.length; i++) {
+
+        if (typed[i] === current[i]) {
+            correct++;
+        }
+    }
+
+    const wpm =
+        minutes > 0
+            ? Math.round((correct / 5) / minutes)
+            : 0;
+
+    let accuracy = 100;
+
+    if (typed.length > 0) {
+
+        accuracy =
+            Math.round(
+                (correct / typed.length) * 100
+            );
+    }
+
+    wpmElement.textContent = wpm;
+
+    accuracyElement.textContent =
+        accuracy + "%";
+
+    timeElement.textContent =
+        Math.floor(elapsed) + "s";
+
+    const progress =
+        Math.min(
+            (typed.length / current.length) * 100,
+            100
+        );
+
+    progressBar.style.width =
+        progress + "%";
+}
+
+
+/* ==========================================
+   FINISH
+   ========================================== */
+
+function finishSentence() {
+
+    if (finished) {
+        return;
+    }
+
+    finished = true;
+
+    clearInterval(timer);
+
+    input.disabled = true;
+
+    updateStats();
+
+    const final =
+        Number(wpmElement.textContent);
+
+    finalWpm.textContent =
+        final + " WPM";
+
+
+    if (final >= 80) {
+
+        resultMessage.textContent =
+            "🔥 80 WPM! That's seriously fast!";
+
+    } else if (final >= 60) {
+
+        resultMessage.textContent =
+            "🚀 Very fast! You're getting close to 80 WPM.";
+
+    } else if (final >= 40) {
+
+        resultMessage.textContent =
+            "⚡ Nice speed! Keep practising.";
+
+    } else {
+
+        resultMessage.textContent =
+            "💪 Good start! Accuracy first, speed later.";
+    }
+
+    result.style.display = "block";
+
+    nextButton.style.display = "inline-block";
+}
+
+
+/* ==========================================
+   TYPING INPUT
+   ========================================== */
+
+input.addEventListener("input", () => {
+
+    if (finished) {
+        return;
+    }
+
+    if (startTime === null) {
+        startTimer();
+    }
+
+    const current =
+        sentences[currentSentence].text;
+
+    const typed =
+        input.value;
+
+    updateTypingDisplay();
+
+    updateStats();
+
+    if (typed === current) {
+
+        finishSentence();
+    }
+});
+
+
+/* ==========================================
+   RESTART
+   ========================================== */
+
+restartButton.addEventListener("click", () => {
+
+    loadSentence();
+});
+
+
+/* ==========================================
+   NEXT SENTENCE
+   ========================================== */
+
+function nextSentence() {
+
+    currentSentence++;
+
+    if (currentSentence >= sentences.length) {
+
+        currentSentence = 0;
+    }
+
+    loadSentence();
+}
+
+
+nextButton.addEventListener(
+    "click",
+    nextSentence
+);
+
+
+continueButton.addEventListener(
+    "click",
+    nextSentence
+);
+
+
+/* ==========================================
+   START
+   ========================================== */
+
+loadSentence();
+
+</script>
+
+</body>
+</html>
