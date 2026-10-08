@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,195 +7,195 @@
 <title>SpeedType - Typing Trainer</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #171717;
-        color: white;
-        min-height: 100vh;
-    }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #171717;
+    color: white;
+    min-height: 100vh;
+}
 
-    header {
-        padding: 22px;
-        text-align: center;
-        background: #222;
-        border-bottom: 1px solid #333;
-    }
+header {
+    padding: 22px;
+    text-align: center;
+    background: #222;
+    border-bottom: 1px solid #333;
+}
 
-    header h1 {
-        margin: 0;
-        font-size: 32px;
-    }
+header h1 {
+    margin: 0;
+    font-size: 32px;
+}
 
-    header p {
-        color: #aaa;
-        margin: 8px 0 0;
-    }
+header p {
+    color: #aaa;
+    margin: 8px 0 0;
+}
 
-    .container {
-        width: min(900px, 92%);
-        margin: 40px auto;
-    }
+.container {
+    width: min(900px, 92%);
+    margin: 40px auto;
+}
 
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.stat-title {
+    color: #999;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.progress {
+    height: 8px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #4ade80;
+    transition: width 0.3s;
+}
+
+.level {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+.typing-box {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.sentence {
+    font-size: 25px;
+    line-height: 1.7;
+    min-height: 90px;
+    margin-bottom: 25px;
+    word-wrap: break-word;
+}
+
+.letter {
+    color: #777;
+}
+
+.letter.correct {
+    color: #4ade80;
+}
+
+.letter.incorrect {
+    color: #f87171;
+    text-decoration: underline;
+}
+
+.letter.current {
+    border-left: 2px solid white;
+}
+
+textarea {
+    width: 100%;
+    height: 130px;
+    resize: none;
+    background: #151515;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 18px;
+    font-size: 20px;
+    outline: none;
+    font-family: inherit;
+}
+
+textarea:focus {
+    border-color: #777;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+button {
+    border: none;
+    border-radius: 9px;
+    padding: 13px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #333;
+    color: white;
+}
+
+button:hover {
+    background: #444;
+}
+
+.result {
+    display: none;
+    margin-top: 20px;
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+}
+
+.result h2 {
+    margin-top: 0;
+}
+
+.big-wpm {
+    font-size: 55px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.message {
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 650px) {
     .stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-
-    .stat {
-        background: #222;
-        border: 1px solid #333;
-        border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-    }
-
-    .stat-title {
-        color: #999;
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-
-    .stat-value {
-        font-size: 30px;
-        font-weight: bold;
-    }
-
-    .progress {
-        height: 8px;
-        background: #333;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 25px;
-    }
-
-    .progress-bar {
-        height: 100%;
-        width: 0%;
-        background: #4ade80;
-        transition: width 0.3s;
-    }
-
-    .level {
-        text-align: center;
-        color: #aaa;
-        margin-bottom: 15px;
-    }
-
-    .typing-box {
-        background: #222;
-        border: 1px solid #333;
-        border-radius: 15px;
-        padding: 30px;
+        grid-template-columns: 1fr;
     }
 
     .sentence {
-        font-size: 25px;
-        line-height: 1.7;
-        min-height: 90px;
-        margin-bottom: 25px;
-        word-wrap: break-word;
-    }
-
-    .letter {
-        color: #777;
-    }
-
-    .letter.correct {
-        color: #4ade80;
-    }
-
-    .letter.incorrect {
-        color: #f87171;
-        text-decoration: underline;
-    }
-
-    .letter.current {
-        border-left: 2px solid white;
-    }
-
-    textarea {
-        width: 100%;
-        height: 130px;
-        resize: none;
-        background: #151515;
-        color: white;
-        border: 1px solid #444;
-        border-radius: 10px;
-        padding: 18px;
         font-size: 20px;
-        outline: none;
-        font-family: inherit;
     }
 
-    textarea:focus {
-        border-color: #777;
+    .typing-box {
+        padding: 20px;
     }
-
-    .buttons {
-        display: flex;
-        gap: 12px;
-        margin-top: 15px;
-    }
-
-    button {
-        border: none;
-        border-radius: 9px;
-        padding: 13px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        background: #333;
-        color: white;
-    }
-
-    button:hover {
-        background: #444;
-    }
-
-    .result {
-        display: none;
-        margin-top: 20px;
-        background: #222;
-        border: 1px solid #333;
-        border-radius: 15px;
-        padding: 25px;
-        text-align: center;
-    }
-
-    .result h2 {
-        margin-top: 0;
-    }
-
-    .big-wpm {
-        font-size: 55px;
-        font-weight: bold;
-        margin: 10px 0;
-    }
-
-    .message {
-        color: #aaa;
-        margin-bottom: 20px;
-    }
-
-    @media (max-width: 650px) {
-        .stats {
-            grid-template-columns: 1fr;
-        }
-
-        .sentence {
-            font-size: 20px;
-        }
-
-        .typing-box {
-            padding: 20px;
-        }
-    }
+}
 </style>
 </head>
 
@@ -202,12 +203,13 @@
 
 <header>
     <h1>⌨️ SpeedType</h1>
-    <p>Train your typing speed and reach 80 WPM!</p>
+    <p>Improve your typing speed and accuracy</p>
 </header>
 
 <div class="container">
 
     <div class="stats">
+
         <div class="stat">
             <div class="stat-title">WPM</div>
             <div class="stat-value" id="wpm">0</div>
@@ -222,6 +224,7 @@
             <div class="stat-title">Time</div>
             <div class="stat-value" id="time">0s</div>
         </div>
+
     </div>
 
     <div class="level" id="level">
@@ -246,15 +249,21 @@
         </textarea>
 
         <div class="buttons">
-            <button id="restartButton">Restart</button>
+
+            <button id="restartButton">
+                Restart
+            </button>
+
             <button id="nextButton" style="display:none;">
                 Next Sentence
             </button>
+
         </div>
 
     </div>
 
     <div class="result" id="result">
+
         <h2>🏁 Sentence Complete!</h2>
 
         <div class="big-wpm" id="finalWpm">
@@ -262,12 +271,13 @@
         </div>
 
         <div class="message" id="resultMessage">
-            Nice!
+            Nice typing!
         </div>
 
         <button id="continueButton">
             Continue
         </button>
+
     </div>
 
 </div>
@@ -276,11 +286,12 @@
 
 /* ==========================================
    SENTENCES
+   Every sentence starts with a capital letter.
    ========================================== */
 
 const sentences = [
 
-    /* LEVEL 1 - VERY EASY */
+    /* LEVEL 1 */
 
     {
         text: "The cat sat on the mat.",
@@ -313,7 +324,7 @@ const sentences = [
     },
 
 
-    /* LEVEL 2 - EASY */
+    /* LEVEL 2 */
 
     {
         text: "The quick fox jumped over the dog.",
@@ -346,7 +357,7 @@ const sentences = [
     },
 
 
-    /* LEVEL 3 - MEDIUM */
+    /* LEVEL 3 */
 
     {
         text: "Typing quickly takes practice and patience.",
@@ -379,7 +390,7 @@ const sentences = [
     },
 
 
-    /* LEVEL 4 - HARD */
+    /* LEVEL 4 */
 
     {
         text: "The fastest typists stay relaxed while keeping their fingers moving.",
@@ -412,7 +423,7 @@ const sentences = [
     },
 
 
-    /* LEVEL 5 - VERY HARD */
+    /* LEVEL 5 */
 
     {
         text: "Extraordinary concentration allows experienced typists to maintain incredible speeds without sacrificing accuracy.",
@@ -433,7 +444,7 @@ const sentences = [
     },
 
     {
-        text: "Reaching eighty words per minute requires accuracy, consistency, confidence, and plenty of regular practice.",
+        text: "Reaching high speeds requires accuracy, consistency, confidence, and plenty of regular practice.",
         level: 5,
         name: "Very Hard"
     },
@@ -452,11 +463,8 @@ const sentences = [
    ========================================== */
 
 let currentSentence = 0;
-
 let startTime = null;
-
 let timer = null;
-
 let finished = false;
 
 
@@ -510,17 +518,21 @@ const continueButton =
 
 function loadSentence() {
 
-    const current = sentences[currentSentence];
+    const current =
+        sentences[currentSentence];
 
     sentenceElement.innerHTML = "";
 
     for (let i = 0; i < current.text.length; i++) {
 
-        const span = document.createElement("span");
+        const span =
+            document.createElement("span");
 
-        span.textContent = current.text[i];
+        span.textContent =
+            current.text[i];
 
-        span.className = "letter";
+        span.className =
+            "letter";
 
         sentenceElement.appendChild(span);
     }
@@ -560,7 +572,7 @@ function loadSentence() {
 
 
 /* ==========================================
-   START TIMER
+   TIMER
    ========================================== */
 
 function startTimer() {
@@ -571,19 +583,22 @@ function startTimer() {
 
     startTime = Date.now();
 
-    timer = setInterval(updateStats, 100);
+    timer =
+        setInterval(updateStats, 100);
 }
 
 
 /* ==========================================
-   UPDATE TYPING DISPLAY
+   DISPLAY TYPING
    ========================================== */
 
 function updateTypingDisplay() {
 
-    const current = sentences[currentSentence].text;
+    const current =
+        sentences[currentSentence].text;
 
-    const typed = input.value;
+    const typed =
+        input.value;
 
     const letters =
         sentenceElement.querySelectorAll(".letter");
@@ -592,25 +607,32 @@ function updateTypingDisplay() {
 
     for (let i = 0; i < letters.length; i++) {
 
-        letters[i].className = "letter";
+        letters[i].className =
+            "letter";
 
         if (i < typed.length) {
 
             if (typed[i] === current[i]) {
 
-                letters[i].classList.add("correct");
+                letters[i].classList.add(
+                    "correct"
+                );
 
                 correct++;
 
             } else {
 
-                letters[i].classList.add("incorrect");
+                letters[i].classList.add(
+                    "incorrect"
+                );
             }
         }
 
         if (i === typed.length) {
 
-            letters[i].classList.add("current");
+            letters[i].classList.add(
+                "current"
+            );
         }
     }
 
@@ -619,7 +641,7 @@ function updateTypingDisplay() {
 
 
 /* ==========================================
-   UPDATE WPM / ACCURACY
+   WPM + ACCURACY
    ========================================== */
 
 function updateStats() {
@@ -651,7 +673,9 @@ function updateStats() {
 
     const wpm =
         minutes > 0
-            ? Math.round((correct / 5) / minutes)
+            ? Math.round(
+                (correct / 5) / minutes
+            )
             : 0;
 
     let accuracy = 100;
@@ -664,7 +688,8 @@ function updateStats() {
             );
     }
 
-    wpmElement.textContent = wpm;
+    wpmElement.textContent =
+        wpm;
 
     accuracyElement.textContent =
         accuracy + "%";
@@ -684,7 +709,7 @@ function updateStats() {
 
 
 /* ==========================================
-   FINISH
+   FINISH SENTENCE
    ========================================== */
 
 function finishSentence() {
@@ -707,36 +732,32 @@ function finishSentence() {
     finalWpm.textContent =
         final + " WPM";
 
-
-    if (final >= 80) {
-
-        resultMessage.textContent =
-            "🔥 80 WPM! That's seriously fast!";
-
-    } else if (final >= 60) {
+    if (final >= 60) {
 
         resultMessage.textContent =
-            "🚀 Very fast! You're getting close to 80 WPM.";
+            "🚀 Very fast typing!";
 
     } else if (final >= 40) {
 
         resultMessage.textContent =
-            "⚡ Nice speed! Keep practising.";
+            "⚡ Great job! Keep practising.";
 
     } else {
 
         resultMessage.textContent =
-            "💪 Good start! Accuracy first, speed later.";
+            "💪 Good work! Accuracy comes first.";
     }
 
-    result.style.display = "block";
+    result.style.display =
+        "block";
 
-    nextButton.style.display = "inline-block";
+    nextButton.style.display =
+        "inline-block";
 }
 
 
 /* ==========================================
-   TYPING INPUT
+   INPUT
    ========================================== */
 
 input.addEventListener("input", () => {
@@ -767,18 +788,14 @@ input.addEventListener("input", () => {
 
 
 /* ==========================================
-   RESTART
+   BUTTONS
    ========================================== */
 
-restartButton.addEventListener("click", () => {
+restartButton.addEventListener(
+    "click",
+    loadSentence
+);
 
-    loadSentence();
-});
-
-
-/* ==========================================
-   NEXT SENTENCE
-   ========================================== */
 
 function nextSentence() {
 
@@ -815,3 +832,4 @@ loadSentence();
 
 </body>
 </html>
+```
